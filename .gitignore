@@ -1,0 +1,12 @@
+# // Build fragments
+build/
+
+# // Package management files
+node_modules/
+yarn-error.log
+
+# // Configuration files
+config/app.development.json
+config/db.development.json
+config/app.production.json
+config/db.production.json

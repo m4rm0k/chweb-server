@@ -1,0 +1,9 @@
+{
+  "cookie": {
+    "name": "chweb",
+    "secret": "71dd4717-c5bd-49ce-bfcc-ffb9e40ef9b8"
+  },
+  "password": {
+    "salt_rounds": 4
+  }
+}
