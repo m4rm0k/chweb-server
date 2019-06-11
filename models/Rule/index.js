@@ -33,6 +33,19 @@ class Rule {
     return Rule.__find({ _id: oid })
   }
 
+  static async delete (id) {
+    let oid = id
+    if (!(id instanceof ObjectID)) {
+      oid = new ObjectID(id)
+    }
+
+    const connection = await Connection.connect()
+    const collection = await connection.database.collection('rules')
+
+    const res = await collection.deleteOne({ _id: oid })
+    return res.deletedCount === 1
+  }
+
   static async all () {
     const connection = await Connection.connect()
     const collection = await connection.database.collection('rules')

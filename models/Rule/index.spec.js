@@ -74,6 +74,23 @@ describe('models/Rule', () => {
     })
   })
 
+  describe('.delete', () => {
+    it('should return true when a rule is deleted', async () => {
+      const res = await Rule.delete(lastRule._id)
+      expect(res).toBe(true)
+    })
+
+    it('should return false when the number of rules deleted !== 1', async () => {
+      const res = await Rule.delete('AAAAAAAAAAAAAAAAAAAAAAAA')
+      expect(res).toBe(false)
+    })
+
+    it('should support passing the id as either a string', async () => {
+      const res = await Rule.delete(lastRule._id.toString())
+      expect(res).toBe(true)
+    })
+  })
+
   describe('.all', () => {
     it('should return an array of `Rule` objects', async () => {
       const rules = await Rule.all()
