@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "A tool for centrally managing web browser access rules",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
     "postinstall": "ln -fsn ../ 'node_modules/>'"
   },
   "dependencies": {

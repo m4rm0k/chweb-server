@@ -15,6 +15,8 @@ describe('controllers/user/middleware', () => {
 
   beforeAll(async () => {
     connection = await Connection.connect()
+    await global.removeAllMongoDocs()
+
     app = expressHelper.create()
     app.get('/test', subject.authenticate, (req, res) => {
       lastUserId = res.locals.user.id
@@ -31,7 +33,7 @@ describe('controllers/user/middleware', () => {
   })
 
   afterAll(async () => {
-    await connection.database.collection('users').removeMany({})
+    await global.removeAllMongoDocs()
     await connection.client.close()
   })
 

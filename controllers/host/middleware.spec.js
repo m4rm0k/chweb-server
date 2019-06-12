@@ -13,6 +13,8 @@ describe('controllers/host/middleware', () => {
 
   beforeAll(async () => {
     connection = await Connection.connect()
+    await global.removeAllMongoDocs()
+
     app = expressHelper.create()
     app.get('/test', subject.authenticate, (req, res) => {
       lastHostId = res.locals.host.id
@@ -29,6 +31,7 @@ describe('controllers/host/middleware', () => {
   })
 
   afterAll(async () => {
+    await global.removeAllMongoDocs()
     await connection.client.close()
   })
 

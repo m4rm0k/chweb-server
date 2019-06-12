@@ -36,9 +36,7 @@ describe('controllers/rules', () => {
   beforeAll(async () => {
     connection = await Connection.connect()
 
-    await connection.database.collection('rules').removeMany({})
-    await connection.database.collection('hosts').removeMany({})
-    await connection.database.collection('users').removeMany({})
+    await global.removeAllMongoDocs()
 
     app = expressHelper.create()
     subject.bind(app)
@@ -57,9 +55,7 @@ describe('controllers/rules', () => {
   })
 
   afterAll(async () => {
-    await connection.database.collection('rules').removeMany({})
-    await connection.database.collection('hosts').removeMany({})
-    await connection.database.collection('users').removeMany({})
+    await global.removeAllMongoDocs()
     await connection.client.close()
   })
 
