@@ -4,6 +4,7 @@ const ObjectID = require('mongodb').ObjectID
 class Host {
   constructor () {
     this.id = new ObjectID()
+    this.apiKey = new ObjectID().toString()
   }
 
   static async __find (criteria) {
@@ -34,6 +35,36 @@ class Host {
 
   static async findByKey (apiKey) {
     return Host.__find({ apiKey: apiKey })
+  }
+
+  static async all () {
+    const connection = await Connection.connect()
+    const collection = await connection.database.collection('hosts')
+    const docs = await collection.find({}).toArray()
+
+    const hosts = []
+    for (let i = 0; i < docs.length; i++) {
+      const host = new Host()
+      host.id = docs[i]._id
+      host.name = docs[i].name
+      host.apiKey = docs[i].apiKey
+      hosts.push(host)
+    }
+
+    return hosts
+  }
+
+  static async delete (id) {
+    let oid = id
+    if (!(id instanceof ObjectID)) {
+      oid = new ObjectID(id)
+    }
+
+    const connection = await Connection.connect()
+    const collection = await connection.database.collection('hosts')
+
+    const res = await collection.deleteOne({ _id: oid })
+    return res.deletedCount === 1
   }
 
   async save () {

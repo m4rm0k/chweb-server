@@ -16,6 +16,11 @@ describe('models/Host', () => {
     })
 
     lastHost = insertRes.ops[0]
+
+    await connection.database.collection('hosts').insertOne({
+      apiKey: new ObjectID().toString(),
+      name: 'Test Host 2'
+    })
   })
 
   afterEach(async () => {
@@ -85,6 +90,61 @@ describe('models/Host', () => {
     })
   })
 
+  describe('.all', () => {
+    it('should return an array of `Rule` objects', async () => {
+      const hosts = await Host.all()
+      expect(hosts.length).toBe(2)
+      for (let i = 0; i < 2; i++) {
+        expect(hosts[i]).toBeInstanceOf(Host)
+      }
+    })
+
+    it('should populate the `id` property of each object', async () => {
+      const hosts = await Host.all()
+      for (let i = 0; i < 2; i++) {
+        expect(hosts[i].id).toBeInstanceOf(ObjectID)
+      }
+    })
+
+    it('should populate the `name` property of each object', async () => {
+      const hosts = await Host.all()
+      for (let i = 0; i < 2; i++) {
+        expect(hosts[i].name).not.toBeNull()
+      }
+    })
+
+    it('should populate the `apiKey` property of each object', async () => {
+      const hosts = await Host.all()
+      for (let i = 0; i < 2; i++) {
+        expect(hosts[i].apiKey).not.toBeNull()
+      }
+    })
+  })
+
+  describe('.delete', () => {
+    it('should return true when a host is deleted', async () => {
+      const res = await Host.delete(lastHost._id)
+      expect(res).toBe(true)
+
+      const count = await connection
+        .database
+        .collection('hosts')
+        .countDocuments({ _id: lastHost._id })
+
+      expect(count).toEqual(0)
+    })
+
+    it('should return false when the number of hosts deleted !== 1', async () => {
+      const res = await Host.delete('AAAAAAAAAAAAAAAAAAAAAAAA')
+      expect(res).toBe(false)
+    })
+
+    it('should support passing the id as either a string', async () => {
+      const res = await Host.delete(lastHost._id.toString())
+      expect(res).toBe(true)
+    })
+  })
+
   describe('#save', () => {
     describe('when `host.id` does not exist in the database', () => {
       it('should insert a new document', async () => {
@@ -98,7 +158,7 @@ describe('models/Host', () => {
           .collection('hosts')
           .countDocuments({})
 
-        expect(count).toEqual(2)
+        expect(count).toEqual(3)
       })
 
       it('should store the new object ID in `host.id`', async () => {
@@ -130,7 +190,7 @@ describe('models/Host', () => {
           .collection('hosts')
           .countDocuments({})
 
-        expect(totalCount).toEqual(1)
+        expect(totalCount).toEqual(2)
 
         const updatedCount = await connection
           .database
