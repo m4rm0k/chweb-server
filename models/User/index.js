@@ -7,6 +7,7 @@ const ObjectID = require('mongodb').ObjectID
 class User {
   constructor () {
     this.id = new ObjectID()
+    this.apiKey = new ObjectID().toString()
   }
 
   static async __find (criteria) {

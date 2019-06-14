@@ -3,6 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "description": "A tool for centrally managing web browser access rules",
+  "bin": {
+    "add-chweb-user": "bin/add-chweb-user.js"
+  },
   "scripts": {
     "test": "jest --runInBand",
     "postinstall": "ln -fsn ../ 'node_modules/>'"
@@ -10,11 +13,14 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "bcrypt": "^3.0.6",
+    "colors": "^1.3.3",
     "cookie-parser": "^1.4.4",
+    "enquirer": "^2.3.0",
     "express": "^4.17.1",
     "helmet": "^3.18.0",
     "mongodb": "^3.2.7",
     "node-fetch": "^2.6.0",
+    "prompt-password": "^1.2.0",
     "sqlite3": "^4.0.8",
     "whatwg-fetch": "^3.0.0"
   },
