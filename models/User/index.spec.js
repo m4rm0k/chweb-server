@@ -88,6 +88,33 @@ describe('models/User', () => {
     })
   })
 
+  describe('.findByUsername', () => {
+    it('should return a `User` instance', async () => {
+      const user = await User.findByUsername(lastUser.username)
+      expect(user).toBeInstanceOf(User)
+    })
+
+    it('should return null when a user cannot be found', async () => {
+      const user = await User.findByUsername('AAAAAAAAAAAAAAAAAAAAAAAA')
+      expect(user).toBeNull()
+    })
+
+    it('should populate the `id` property', async () => {
+      const user = await User.findByUsername(lastUser.username)
+      expect(user.id).toEqual(lastUser._id)
+    })
+
+    it('should populate the `apiKey` property', async () => {
+      const user = await User.findByUsername(lastUser.username)
+      expect(user.apiKey).toEqual(lastUser.apiKey)
+    })
+
+    it('should populate the `username` property', async () => {
+      const user = await User.findByUsername(lastUser.username)
+      expect(user.username).toEqual(lastUser.username)
+    })
+  })
+
   describe('#save', () => {
     describe('when `user.id` does not exist in the database', () => {
       it('should insert a new document', async () => {

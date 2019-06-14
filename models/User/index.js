@@ -39,6 +39,10 @@ class User {
     return User.__find({ apiKey: apiKey })
   }
 
+  static async findByUsername (username) {
+    return User.__find({ username: username })
+  }
+
   async setPassword (password) {
     const connection = await Connection.connect()
     const collection = await connection.database.collection('users')
