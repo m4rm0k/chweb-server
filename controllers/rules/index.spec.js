@@ -136,7 +136,7 @@ describe('controllers/rules', () => {
       expect(res.status).toBe(400)
 
       res = await agent
-        .get(endpoint)
+        .put(endpoint)
         .query({ apiKey: 'invalid' })
 
       expect(res.status).toBe(401)
