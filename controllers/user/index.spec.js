@@ -38,6 +38,36 @@ describe('controllers/user', () => {
     })
   })
 
+  describe('GET /api/v1/user', () => {
+    const endpoint = '/api/v1/user'
+
+    it('should require a valid user API key', async () => {
+      let res = await agent
+        .get(endpoint)
+        .query({ apiKey: user.apiKey })
+
+      expect(res.status).toBe(200)
+
+      res = await agent
+        .get(endpoint)
+        .query({ apiKey: 'invalid' })
+
+      expect(res.status).toBe(401)
+    })
+
+    it('should return the user object of the current user', async () => {
+      const res = await agent
+        .get(endpoint)
+        .query({ apiKey: user.apiKey })
+
+      expect(res.body.data).toEqual({
+        id: user.id.toString(),
+        apiKey: user.apiKey,
+        username: user.username
+      })
+    })
+  })
+
   describe('POST /api/v1/user/authenticate', () => {
     const endpoint = '/api/v1/user/authenticate'
 

@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "A tool for centrally managing web browser access rules",
   "bin": {
-    "add-chweb-user": "bin/add-chweb-user.js"
+    "add-chweb-user": "bin/add-chweb-user.js",
+    "chweb-httpd": "bin/chweb-httpd.js"
   },
   "scripts": {
     "test": "jest --runInBand",

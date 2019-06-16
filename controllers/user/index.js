@@ -43,8 +43,18 @@ async function authenticate (req, res, next) {
   }
 }
 
+function getUser (req, res, next) {
+  return res.send({
+    success: true,
+    data: res.locals.user
+  })
+}
+
 function bind (app) {
   const router = express.Router()
+
+  router.route('/')
+    .get(middleware.authenticate, getUser)
 
   router.route('/authenticate')
     .post(authenticate)
