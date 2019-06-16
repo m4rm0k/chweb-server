@@ -1,5 +1,5 @@
 const express = require('express')
-const verifyHost = require('>/controllers/host').middleware.authenticate
+const verifyHost = require('>/controllers/hosts').middleware.authenticate
 const verifyUser = require('>/controllers/user').middleware.authenticate
 
 const Rule = require('>/models/Rule')
