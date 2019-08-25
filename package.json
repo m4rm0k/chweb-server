@@ -8,7 +8,7 @@
     "chweb-httpd": "bin/chweb-httpd.js"
   },
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "mkdir -p public/app/build && jest --runInBand",
     "postinstall": "ln -fsn ../ 'node_modules/>'"
   },
   "dependencies": {
@@ -44,6 +44,7 @@
     "setupFiles": [
       "<rootDir>/test/setup/jest.js"
     ],
-    "globalSetup": "<rootDir>/test/setup/database.js"
+    "globalSetup": "<rootDir>/test/setup/database.js",
+    "testPathIgnorePatterns": ["/node_modules/", "/public/"]
   }
 }

@@ -14,7 +14,8 @@ const app = express()
 const controllerNames = [
   'hosts',
   'rules',
-  'user'
+  'user',
+  'static'
 ]
 
 function bindErrorHandler (app) {

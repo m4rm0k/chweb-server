@@ -1,0 +1,3 @@
+[submodule "public/app"]
+	path = public/app
+	url = git@github.com:rastating/chweb-react.git
