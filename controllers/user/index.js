@@ -25,8 +25,12 @@ async function authenticate (req, res, next) {
       })
     }
 
+    let authenticated = false
     const user = await User.findByUsername(req.body.username)
-    const authenticated = await user.verifyPassword(req.body.password)
+
+    if (user) {
+      authenticated = await user.verifyPassword(req.body.password)
+    }
 
     if (!authenticated) {
       return res.send({
