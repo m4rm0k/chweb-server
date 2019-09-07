@@ -3,6 +3,7 @@ const Host = require('./index')
 const ObjectID = require('mongodb').ObjectID
 
 describe('models/Host', () => {
+  const lastSeen = 1563052562 * 1000
   let connection
   let lastHost
 
@@ -12,14 +13,16 @@ describe('models/Host', () => {
 
     const insertRes = await connection.database.collection('hosts').insertOne({
       apiKey: '1234-5678',
-      name: 'Test Host'
+      name: 'Test Host',
+      lastSeen: lastSeen
     })
 
     lastHost = insertRes.ops[0]
 
     await connection.database.collection('hosts').insertOne({
       apiKey: new ObjectID().toString(),
-      name: 'Test Host 2'
+      name: 'Test Host 2',
+      lastSeen: lastSeen
     })
   })
 
@@ -61,6 +64,11 @@ describe('models/Host', () => {
       const host = await Host.find(lastHost._id)
       expect(host.name).toEqual(lastHost.name)
     })
+
+    it('should populate the `lastSeen` property', async () => {
+      const host = await Host.find(lastHost._id)
+      expect(host.lastSeen).toEqual(lastHost.lastSeen)
+    })
   })
 
   describe('.findByKey', () => {
@@ -87,6 +95,11 @@ describe('models/Host', () => {
     it('should populate the `name` property', async () => {
       const host = await Host.findByKey(lastHost.apiKey)
       expect(host.name).toEqual(lastHost.name)
+    })
+
+    it('should populate the `lastSeen` property', async () => {
+      const host = await Host.findByKey(lastHost.apiKey)
+      expect(host.lastSeen).toEqual(lastHost.lastSeen)
     })
   })
 
@@ -117,6 +130,13 @@ describe('models/Host', () => {
       const hosts = await Host.all()
       for (let i = 0; i < 2; i++) {
         expect(hosts[i].apiKey).not.toBeNull()
+      }
+    })
+
+    it('should populate the `lastSeen` property of each object', async () => {
+      const hosts = await Host.all()
+      for (let i = 0; i < 2; i++) {
+        expect(hosts[i].lastSeen).not.toBeNull()
       }
     })
   })

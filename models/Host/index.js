@@ -17,6 +17,7 @@ class Host {
       host.id = doc._id
       host.apiKey = doc.apiKey
       host.name = doc.name
+      host.lastSeen = doc.lastSeen
 
       return host
     } else {
