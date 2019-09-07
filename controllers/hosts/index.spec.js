@@ -224,10 +224,10 @@ describe('controllers/host', () => {
   describe('DELETE /api/v1/hosts', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
-        .delete(endpoint)
+        .delete(`${endpoint}/${hosts[0].id}`)
         .query({ apiKey: user.apiKey })
 
-      expect(res.status).toBe(400)
+      expect(res.status).toBe(200)
 
       res = await agent
         .get(endpoint)
@@ -236,20 +236,11 @@ describe('controllers/host', () => {
       expect(res.status).toBe(401)
     })
 
-    it('should validate an id was specified', async () => {
-      const res = await agent
-        .delete(endpoint)
-        .query({ apiKey: user.apiKey })
-
-      expect(res.status).toBe(400)
-    })
-
     it('should delete the specified host', async () => {
       const res = await agent
-        .delete(endpoint)
+        .delete(`${endpoint}/${hosts[0].id}`)
         .query({
-          apiKey: user.apiKey,
-          id: hosts[0].id
+          apiKey: user.apiKey
         })
 
       expect(res.status).toBe(200)

@@ -63,14 +63,8 @@ async function updateHost (req, res, next) {
 
 async function deleteHost (req, res, next) {
   try {
-    if (!req.query.id) {
-      return res.status(400).send({
-        success: false
-      })
-    }
-
     return res.send({
-      success: await Host.delete(req.query.id)
+      success: await Host.delete(req.params.id)
     })
   } catch (e) {
     return next(e)
@@ -84,6 +78,8 @@ function bind (app) {
     .get(verifyUser, getHosts)
     .put(verifyUser, createHost)
     .post(verifyUser, updateHost)
+
+  router.route('/:id')
     .delete(verifyUser, deleteHost)
 
   app.use('/api/v1/hosts', router)
