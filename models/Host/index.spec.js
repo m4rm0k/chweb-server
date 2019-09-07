@@ -122,21 +122,21 @@ describe('models/Host', () => {
     it('should populate the `name` property of each object', async () => {
       const hosts = await Host.all()
       for (let i = 0; i < 2; i++) {
-        expect(hosts[i].name).not.toBeNull()
+        expect(hosts[i].name).not.toBeUndefined()
       }
     })
 
     it('should populate the `apiKey` property of each object', async () => {
       const hosts = await Host.all()
       for (let i = 0; i < 2; i++) {
-        expect(hosts[i].apiKey).not.toBeNull()
+        expect(hosts[i].apiKey).not.toBeUndefined()
       }
     })
 
     it('should populate the `lastSeen` property of each object', async () => {
       const hosts = await Host.all()
       for (let i = 0; i < 2; i++) {
-        expect(hosts[i].lastSeen).not.toBeNull()
+        expect(hosts[i].lastSeen).not.toBeUndefined()
       }
     })
   })

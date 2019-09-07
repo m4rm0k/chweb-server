@@ -49,6 +49,7 @@ class Host {
       host.id = docs[i]._id
       host.name = docs[i].name
       host.apiKey = docs[i].apiKey
+      host.lastSeen = docs[i].lastSeen
       hosts.push(host)
     }
 
