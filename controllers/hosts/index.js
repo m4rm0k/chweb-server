@@ -71,6 +71,17 @@ async function deleteHost (req, res, next) {
   }
 }
 
+async function getHost (req, res, next) {
+  try {
+    return res.send({
+      success: true,
+      data: await Host.find(req.params.id)
+    })
+  } catch (e) {
+    return next(e)
+  }
+}
+
 function bind (app) {
   const router = express.Router()
 
@@ -80,6 +91,7 @@ function bind (app) {
     .post(verifyUser, updateHost)
 
   router.route('/:id')
+    .get(verifyUser, getHost)
     .delete(verifyUser, deleteHost)
 
   app.use('/api/v1/hosts', router)

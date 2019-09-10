@@ -221,7 +221,34 @@ describe('controllers/host', () => {
     })
   })
 
-  describe('DELETE /api/v1/hosts', () => {
+  describe('GET /api/v1/hosts/:id', () => {
+    it('should require a valid user API key', async () => {
+      const endpoint = `/api/v1/hosts/${hosts[0].id}`
+      let res = await agent
+        .get(endpoint)
+        .query({ apiKey: user.apiKey })
+
+      expect(res.status).toBe(200)
+
+      res = await agent
+        .get(endpoint)
+        .query({ apiKey: 'invalid' })
+
+      expect(res.status).toBe(401)
+    })
+
+    it('should return the host in `data`', async () => {
+      const endpoint = `/api/v1/hosts/${hosts[0].id}`
+      const res = await agent
+        .get(endpoint)
+        .query({ apiKey: user.apiKey })
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toEqual(hosts[0])
+    })
+  })
+
+  describe('DELETE /api/v1/hosts/:id', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
         .delete(`${endpoint}/${hosts[0].id}`)
