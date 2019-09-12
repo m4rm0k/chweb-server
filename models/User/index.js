@@ -3,11 +3,12 @@ const bcrypt = require('bcrypt')
 const Connection = require('>/lib/database/Connection')
 const Config = require('>/lib/config')
 const ObjectID = require('mongodb').ObjectID
+const uuidv4 = require('uuid/v4')
 
 class User {
   constructor () {
     this.id = new ObjectID()
-    this.apiKey = new ObjectID().toString()
+    this.apiKey = uuidv4()
   }
 
   static async __find (criteria) {
