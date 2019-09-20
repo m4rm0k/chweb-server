@@ -2,6 +2,7 @@ const express = require('express')
 const verifyHost = require('>/controllers/hosts').middleware.authenticate
 const verifyUser = require('>/controllers/user').middleware.authenticate
 
+const ObjectId = require('mongodb').ObjectId
 const Rule = require('>/models/Rule')
 const Setting = require('>/models/Setting')
 
@@ -52,7 +53,17 @@ async function createRule (req, res, next) {
 }
 
 async function deleteRule (req, res, next) {
-  if (!req.query.id) {
+  if (!req.params.id) {
+    return res.status(404).send({
+      success: false
+    })
+  }
+
+  let id = null
+
+  try {
+    id = new ObjectId(req.params.id)
+  } catch (e) {
     return res.status(400).send({
       success: false
     })
@@ -60,7 +71,7 @@ async function deleteRule (req, res, next) {
 
   try {
     return res.send({
-      success: await Rule.delete(req.query.id)
+      success: await Rule.delete(id)
     })
   } catch (e) {
     return next(e)
@@ -117,6 +128,8 @@ function bind (app) {
     .get(verifyHost, getRules)
     .put(verifyUser, createRule)
     .post(verifyUser, updateRules)
+
+  router.route('/:id')
     .delete(verifyUser, deleteRule)
 
   app.use('/api/v1/rules', router)

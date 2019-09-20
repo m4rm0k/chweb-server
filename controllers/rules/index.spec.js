@@ -223,13 +223,13 @@ describe('controllers/rules', () => {
   describe('DELETE /api/v1/rules', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
-        .delete(endpoint)
+        .delete(`${endpoint}/${rules[0].id}`)
         .query({ apiKey: user.apiKey })
 
       expect(res.status).not.toBe(401)
 
       res = await agent
-        .delete(endpoint)
+        .delete(`${endpoint}/${rules[0].id}`)
         .query({ apiKey: 'invalid' })
 
       expect(res.status).toBe(401)
@@ -237,7 +237,7 @@ describe('controllers/rules', () => {
 
     it('should validate a rule ID was specified', async () => {
       const res = await agent
-        .delete(endpoint)
+        .delete(`${endpoint}/invalid}`)
         .query({ apiKey: user.apiKey })
 
       expect(res.status).toBe(400)
@@ -249,9 +249,8 @@ describe('controllers/rules', () => {
         .findOne({ host: 'rastating.github.io' })
 
       const res = await agent
-        .delete(endpoint)
+        .delete(`${endpoint}/${rules[0].id}`)
         .query({
-          id: doc._id.toString(),
           apiKey: user.apiKey
         })
 
@@ -274,7 +273,7 @@ describe('controllers/rules', () => {
       expect(res.status).not.toBe(401)
 
       res = await agent
-        .delete(endpoint)
+        .post(endpoint)
         .query({ apiKey: 'invalid' })
 
       expect(res.status).toBe(401)
