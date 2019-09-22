@@ -1,27 +1,21 @@
 const express = require('express')
-const verifyHost = require('>/controllers/hosts').middleware.authenticate
 const verifyUser = require('>/controllers/user').middleware.authenticate
 
 const ObjectId = require('mongodb').ObjectId
 const Rule = require('>/models/Rule')
-const Setting = require('>/models/Setting')
 
 async function getRules (req, res, next) {
   try {
     const rules = await Rule.all()
-    const defaultAction = await Setting.find('defaultAction')
 
     res.send({
       success: true,
-      data: {
-        defaultAction: defaultAction.value,
-        rules: rules.map(r => ({
-          id: r.id.toString(),
-          type: r.type,
-          action: r.action,
-          host: r.host
-        }))
-      }
+      data: rules.map(r => ({
+        id: r.id.toString(),
+        type: r.type,
+        action: r.action,
+        host: r.host
+      }))
     })
   } catch (e) {
     next(e)
@@ -125,7 +119,7 @@ function bind (app) {
   const router = express.Router()
 
   router.route('/')
-    .get(verifyHost, getRules)
+    .get(verifyUser, getRules)
     .put(verifyUser, createRule)
     .post(verifyUser, updateRules)
 

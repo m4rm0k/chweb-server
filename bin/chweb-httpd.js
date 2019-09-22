@@ -12,6 +12,7 @@ const helmet = require('helmet')
 
 const app = express()
 const controllerNames = [
+  'client',
   'hosts',
   'rules',
   'user',
@@ -32,10 +33,12 @@ function start () {
   app.use(cookieParser(config.app.cookie.secret))
   app.use(bodyParser.json())
 
-  for (let name of controllerNames) {
+  for (const name of controllerNames) {
     const controller = require(`>/controllers/${name}`)
     controller.bind(app)
   }
+
+  bindErrorHandler(app)
 
   return app.listen(config.app.bind_port)
 }

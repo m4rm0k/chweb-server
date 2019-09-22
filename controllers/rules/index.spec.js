@@ -96,10 +96,10 @@ describe('controllers/rules', () => {
   })
 
   describe('GET /api/v1/rules', () => {
-    it('should require a valid host API key', async () => {
+    it('should require a valid user API key', async () => {
       let res = await agent
         .get(endpoint)
-        .query({ apiKey: host.apiKey })
+        .query({ apiKey: user.apiKey })
 
       expect(res.status).toBe(200)
 
@@ -110,20 +110,12 @@ describe('controllers/rules', () => {
       expect(res.status).toBe(401)
     })
 
-    it('should return the current ruleset as an array in `data.rules`', async () => {
+    it('should return the current ruleset as an array in `data`', async () => {
       const res = await agent
         .get(endpoint)
-        .query({ apiKey: host.apiKey })
+        .query({ apiKey: user.apiKey })
 
-      expect(res.body.data.rules).toEqual(rules)
-    })
-
-    it('should return the default action in `data.defaultAction`', async () => {
-      const res = await agent
-        .get(endpoint)
-        .query({ apiKey: host.apiKey })
-
-      expect(res.body.data.defaultAction).toEqual('REJECT')
+      expect(res.body.data).toEqual(rules)
     })
   })
 
