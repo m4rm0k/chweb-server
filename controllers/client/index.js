@@ -8,6 +8,10 @@ module.exports = {}
 
 async function getConfig (req, res, next) {
   try {
+    const host = res.locals.host
+    host.lastSeen = Date.now()
+    await host.save()
+
     const rules = await Rule.all()
     const defaultAction = await Setting.find('defaultAction')
 

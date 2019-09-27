@@ -38,12 +38,6 @@ describe('controllers/client', () => {
 
     app = expressHelper.create()
     subject.bind(app)
-
-    host = new Host()
-    host.name = 'Test'
-    host.apiKey = new ObjectID().toString()
-    await host.save()
-
     agent = request.agent(app)
   })
 
@@ -58,6 +52,11 @@ describe('controllers/client', () => {
     await connection.database
       .collection('rules')
       .insertMany(rulesToInsert)
+
+    host = new Host()
+    host.name = 'Test'
+    host.apiKey = new ObjectID().toString()
+    await host.save()
 
     await connection.database
       .collection('settings')
@@ -119,6 +118,19 @@ describe('controllers/client', () => {
         .query({ apiKey: host.apiKey })
 
       expect(res.body.data.defaultAction).toEqual('REJECT')
+    })
+
+    it('should update the last seen date of the host accessing the endpoint', async () => {
+      const timestamp = Date.now()
+      expect(host.lastSeen).toBeFalsy()
+
+      await agent
+        .get(endpoint)
+        .query({ apiKey: host.apiKey })
+
+      host = await Host.find(host.id)
+      expect(host.lastSeen).toBeTruthy()
+      expect(host.lastSeen).toBeGreaterThanOrEqual(timestamp)
     })
   })
 })

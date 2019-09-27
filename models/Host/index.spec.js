@@ -201,6 +201,7 @@ describe('models/Host', () => {
       it('should update the existing document', async () => {
         const host = await Host.find(lastHost._id)
         host.name = 'updated'
+        host.lastSeen = 1234
         await host.save()
 
         expect(host.id).toEqual(lastHost._id)
@@ -215,7 +216,7 @@ describe('models/Host', () => {
         const updatedCount = await connection
           .database
           .collection('hosts')
-          .countDocuments({ name: 'updated' })
+          .countDocuments({ name: 'updated', lastSeen: 1234 })
 
         expect(updatedCount).toEqual(1)
       })

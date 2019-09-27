@@ -78,7 +78,8 @@ class Host {
       const res = await collection.updateOne({ _id: this.id }, {
         $set: {
           apiKey: this.apiKey,
-          name: this.name
+          name: this.name,
+          lastSeen: this.lastSeen
         }
       }, { upsert: true })
 
