@@ -381,7 +381,7 @@ describe('controllers/rules', () => {
         expect(res.status).toBe(200)
         let rule = await connection.database
           .collection('rules')
-          .findOne({ _id: rules[0].id })
+          .findOne({ _id: new ObjectID(rules[0].id) })
 
         expect(rule.type).toEqual('EDITED.TYPE.1')
         expect(rule.action).toEqual('EDITED.ACTION.1')
@@ -389,7 +389,7 @@ describe('controllers/rules', () => {
 
         rule = await connection.database
           .collection('rules')
-          .findOne({ _id: rules[1].id })
+          .findOne({ _id: new ObjectID(rules[1].id) })
 
         expect(rule.type).toEqual('EDITED.TYPE.2')
         expect(rule.action).toEqual('EDITED.ACTION.2')
@@ -484,7 +484,7 @@ describe('controllers/rules', () => {
 
         const rule = await connection.database
           .collection('rules')
-          .findOne({ _id: rules[1].id })
+          .findOne({ _id: new ObjectID(rules[1].id) })
 
         expect(rule.type).toEqual('EDITED.TYPE.2')
         expect(rule.action).toEqual('EDITED.ACTION.2')
