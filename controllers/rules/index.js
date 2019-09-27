@@ -22,6 +22,28 @@ async function getRules (req, res, next) {
   }
 }
 
+async function getRule (req, res, next) {
+  try {
+    const rule = await Rule.find(req.params.id)
+
+    if (!rule) {
+      return res.status(404).send()
+    } else {
+      return res.send({
+        success: true,
+        data: {
+          id: rule.id.toString(),
+          type: rule.type,
+          action: rule.action,
+          host: rule.host
+        }
+      })
+    }
+  } catch (e) {
+    next(e)
+  }
+}
+
 async function createRule (req, res, next) {
   try {
     const body = req.body
@@ -85,7 +107,7 @@ async function updateRules (req, res, next) {
     const updatedRules = []
     for (let i = 0; i < rules.length; i++) {
       const rule = new Rule()
-      rule.id = rules[i].id
+      rule.id = new ObjectId(rules[i].id)
       rule.action = rules[i].action
       rule.type = rules[i].type
       rule.host = rules[i].host
@@ -124,6 +146,7 @@ function bind (app) {
     .post(verifyUser, updateRules)
 
   router.route('/:id')
+    .get(verifyUser, getRule)
     .delete(verifyUser, deleteRule)
 
   app.use('/api/v1/rules', router)

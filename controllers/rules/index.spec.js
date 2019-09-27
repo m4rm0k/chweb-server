@@ -212,7 +212,39 @@ describe('controllers/rules', () => {
     })
   })
 
-  describe('DELETE /api/v1/rules', () => {
+  describe('GET /api/v1/rules/:id', () => {
+    it('should require a valid user API key', async () => {
+      let res = await agent
+        .get(`${endpoint}/${rules[0].id}`)
+        .query({ apiKey: user.apiKey })
+
+      expect(res.status).toBe(200)
+
+      res = await agent
+        .get(`${endpoint}/${rules[0].id}`)
+        .query({ apiKey: 'invalid' })
+
+      expect(res.status).toBe(401)
+    })
+
+    it('should require a valid rule id', async () => {
+      const res = await agent
+        .get(`${endpoint}/${(new ObjectID()).toString()}`)
+        .query({ apiKey: user.apiKey })
+
+      expect(res.status).toBe(404)
+    })
+
+    it('should return the rule in `data`', async () => {
+      const res = await agent
+        .get(`${endpoint}/${rules[0].id}`)
+        .query({ apiKey: user.apiKey })
+
+      expect(res.body.data).toEqual(rules[0])
+    })
+  })
+
+  describe('DELETE /api/v1/rules/:id', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
         .delete(`${endpoint}/${rules[0].id}`)
