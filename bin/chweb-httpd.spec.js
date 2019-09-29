@@ -28,6 +28,13 @@ describe('bin/chweb-httpd', () => {
     console.error = originalError
   })
 
+  it('should bind a controller to `/api/v1/client`', async () => {
+    const res = await agent.get('/api/v1/client/config')
+    expect(res.status).not.toEqual(404)
+    expect(res.status).not.toBeNull()
+    expect(res.status).not.toBeUndefined()
+  })
+
   it('should bind a controller to `/api/v1/hosts`', async () => {
     const res = await agent.get('/api/v1/hosts')
     expect(res.status).not.toEqual(404)
