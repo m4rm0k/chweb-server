@@ -82,7 +82,7 @@ async function getHost (req, res, next) {
   }
 }
 
-function bind (app) {
+function bind (app, mountPath = '/') {
   const router = express.Router()
 
   router.route('/')
@@ -94,7 +94,7 @@ function bind (app) {
     .get(verifyUser, getHost)
     .delete(verifyUser, deleteHost)
 
-  app.use('/api/v1/hosts', router)
+  app.use(mountPath, router)
 }
 
 module.exports = {

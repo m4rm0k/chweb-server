@@ -32,8 +32,8 @@ async function getConfig (req, res, next) {
   }
 }
 
-module.exports.bind = (app) => {
+module.exports.bind = (app, mountPath = '/') => {
   const router = express.Router()
   router.route('/config').get(verifyHost, getConfig)
-  app.use('/api/v1/client', router)
+  app.use(mountPath, router)
 }

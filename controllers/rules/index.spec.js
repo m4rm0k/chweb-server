@@ -8,7 +8,6 @@ const ObjectID = require('mongodb').ObjectID
 const User = require('>/models/User')
 
 describe('controllers/rules', () => {
-  const endpoint = '/api/v1/rules'
   const rulesToInsert = [{
     _id: new ObjectID(),
     type: 'ACCESS',
@@ -95,16 +94,16 @@ describe('controllers/rules', () => {
     await connection.database.collection('rules').removeMany({})
   })
 
-  describe('GET /api/v1/rules', () => {
+  describe('GET /', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
-        .get(endpoint)
+        .get('/')
         .query({ apiKey: user.apiKey })
 
       expect(res.status).toBe(200)
 
       res = await agent
-        .get(endpoint)
+        .get('/')
         .query({ apiKey: 'invalid' })
 
       expect(res.status).toBe(401)
@@ -112,23 +111,23 @@ describe('controllers/rules', () => {
 
     it('should return the current ruleset as an array in `data`', async () => {
       const res = await agent
-        .get(endpoint)
+        .get('/')
         .query({ apiKey: user.apiKey })
 
       expect(res.body.data).toEqual(rules)
     })
   })
 
-  describe('PUT /api/v1/rules', () => {
+  describe('PUT /', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
-        .put(endpoint)
+        .put('/')
         .query({ apiKey: user.apiKey })
 
       expect(res.status).toBe(400)
 
       res = await agent
-        .put(endpoint)
+        .put('/')
         .query({ apiKey: 'invalid' })
 
       expect(res.status).toBe(401)
@@ -136,7 +135,7 @@ describe('controllers/rules', () => {
 
     it('should validate a host was specified', async () => {
       const res = await agent
-        .put(endpoint)
+        .put('/')
         .query({ apiKey: user.apiKey })
         .send({
           action: 'REJECT',
@@ -148,7 +147,7 @@ describe('controllers/rules', () => {
 
     it('should validate an action was specified', async () => {
       const res = await agent
-        .put(endpoint)
+        .put('/')
         .query({ apiKey: user.apiKey })
         .send({
           host: '*.google.com',
@@ -160,7 +159,7 @@ describe('controllers/rules', () => {
 
     it('should validate a rule type was specified', async () => {
       const res = await agent
-        .put(endpoint)
+        .put('/')
         .query({ apiKey: user.apiKey })
         .send({
           action: 'REJECT',
@@ -172,7 +171,7 @@ describe('controllers/rules', () => {
 
     it('should add the rule to the rules collection', async () => {
       const res = await agent
-        .put(endpoint)
+        .put('/')
         .query({ apiKey: user.apiKey })
         .send({
           action: 'REJECT',
@@ -190,7 +189,7 @@ describe('controllers/rules', () => {
 
     it('should return the new rule object', async () => {
       const res = await agent
-        .put(endpoint)
+        .put('/')
         .query({ apiKey: user.apiKey })
         .send({
           action: 'REJECT',
@@ -212,16 +211,16 @@ describe('controllers/rules', () => {
     })
   })
 
-  describe('GET /api/v1/rules/:id', () => {
+  describe('GET /:id', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
-        .get(`${endpoint}/${rules[0].id}`)
+        .get(`/${rules[0].id}`)
         .query({ apiKey: user.apiKey })
 
       expect(res.status).toBe(200)
 
       res = await agent
-        .get(`${endpoint}/${rules[0].id}`)
+        .get(`/${rules[0].id}`)
         .query({ apiKey: 'invalid' })
 
       expect(res.status).toBe(401)
@@ -229,7 +228,7 @@ describe('controllers/rules', () => {
 
     it('should require a valid rule id', async () => {
       const res = await agent
-        .get(`${endpoint}/${(new ObjectID()).toString()}`)
+        .get(`/${(new ObjectID()).toString()}`)
         .query({ apiKey: user.apiKey })
 
       expect(res.status).toBe(404)
@@ -237,23 +236,23 @@ describe('controllers/rules', () => {
 
     it('should return the rule in `data`', async () => {
       const res = await agent
-        .get(`${endpoint}/${rules[0].id}`)
+        .get(`/${rules[0].id}`)
         .query({ apiKey: user.apiKey })
 
       expect(res.body.data).toEqual(rules[0])
     })
   })
 
-  describe('DELETE /api/v1/rules/:id', () => {
+  describe('DELETE /:id', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
-        .delete(`${endpoint}/${rules[0].id}`)
+        .delete(`/${rules[0].id}`)
         .query({ apiKey: user.apiKey })
 
       expect(res.status).not.toBe(401)
 
       res = await agent
-        .delete(`${endpoint}/${rules[0].id}`)
+        .delete(`/${rules[0].id}`)
         .query({ apiKey: 'invalid' })
 
       expect(res.status).toBe(401)
@@ -261,7 +260,7 @@ describe('controllers/rules', () => {
 
     it('should validate a rule ID was specified', async () => {
       const res = await agent
-        .delete(`${endpoint}/invalid}`)
+        .delete('/invalid')
         .query({ apiKey: user.apiKey })
 
       expect(res.status).toBe(400)
@@ -273,7 +272,7 @@ describe('controllers/rules', () => {
         .findOne({ host: 'rastating.github.io' })
 
       const res = await agent
-        .delete(`${endpoint}/${rules[0].id}`)
+        .delete(`/${rules[0].id}`)
         .query({
           apiKey: user.apiKey
         })
@@ -288,16 +287,16 @@ describe('controllers/rules', () => {
     })
   })
 
-  describe('POST /api/v1/rules', () => {
+  describe('POST /', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
-        .post(endpoint)
+        .post('/')
         .query({ apiKey: user.apiKey })
 
       expect(res.status).not.toBe(401)
 
       res = await agent
-        .post(endpoint)
+        .post('/')
         .query({ apiKey: 'invalid' })
 
       expect(res.status).toBe(401)
@@ -306,7 +305,7 @@ describe('controllers/rules', () => {
     describe('when an array of rules are in the body', () => {
       it('should validate a host was specified for each rule', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send([{
             id: rules[0].id,
@@ -325,7 +324,7 @@ describe('controllers/rules', () => {
 
       it('should validate an action was specified for each rule', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send([{
             id: rules[0].id,
@@ -344,7 +343,7 @@ describe('controllers/rules', () => {
 
       it('should validate a rule type was specified for each rule', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send([{
             id: rules[0].id,
@@ -363,7 +362,7 @@ describe('controllers/rules', () => {
 
       it('should update the specified rules', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send([{
             id: rules[0].id,
@@ -398,7 +397,7 @@ describe('controllers/rules', () => {
 
       it('should return the updated rule objects', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send([{
             id: rules[0].id,
@@ -432,7 +431,7 @@ describe('controllers/rules', () => {
     describe('when a single rule is submitted', () => {
       it('should validate a host was specified', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send({
             id: rules[1].id,
@@ -445,7 +444,7 @@ describe('controllers/rules', () => {
 
       it('should validate an action was specified', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send({
             id: rules[1].id,
@@ -458,7 +457,7 @@ describe('controllers/rules', () => {
 
       it('should validate a rule type was specified', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send({
             id: rules[1].id,
@@ -471,7 +470,7 @@ describe('controllers/rules', () => {
 
       it('should update the specified rule', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send({
             id: rules[1].id,
@@ -493,7 +492,7 @@ describe('controllers/rules', () => {
 
       it('should return the updated rule object', async () => {
         const res = await agent
-          .post(endpoint)
+          .post('/')
           .query({ apiKey: user.apiKey })
           .send({
             id: rules[1].id,

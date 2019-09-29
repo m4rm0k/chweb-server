@@ -54,7 +54,7 @@ function getUser (req, res, next) {
   })
 }
 
-function bind (app) {
+function bind (app, mountPath = '/') {
   const router = express.Router()
 
   router.route('/')
@@ -63,7 +63,7 @@ function bind (app) {
   router.route('/authenticate')
     .post(authenticate)
 
-  app.use('/api/v1/user', router)
+  app.use(mountPath, router)
 }
 
 module.exports = {

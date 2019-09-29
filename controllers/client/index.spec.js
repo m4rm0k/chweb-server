@@ -87,8 +87,8 @@ describe('controllers/client', () => {
     await connection.database.collection('rules').removeMany({})
   })
 
-  describe('GET /api/v1/client/config', () => {
-    const endpoint = '/api/v1/client/config'
+  describe('GET /config', () => {
+    const endpoint = '/config'
 
     it('should require a valid host API key', async () => {
       let res = await agent

@@ -29,7 +29,7 @@ describe('controllers/static', () => {
       const res = await await agent.get('/')
       expect(res.status).toBeGreaterThan(299)
       expect(res.status).toBeLessThan(400)
-      expect(res.header['location']).toEqual('/app')
+      expect(res.header.location).toEqual('/app')
     })
   })
 

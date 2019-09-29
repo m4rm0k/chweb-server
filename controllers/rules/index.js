@@ -137,7 +137,7 @@ async function updateRules (req, res, next) {
   }
 }
 
-function bind (app) {
+function bind (app, mountPath = '/') {
   const router = express.Router()
 
   router.route('/')
@@ -149,7 +149,7 @@ function bind (app) {
     .get(verifyUser, getRule)
     .delete(verifyUser, deleteRule)
 
-  app.use('/api/v1/rules', router)
+  app.use(mountPath, router)
 }
 
 module.exports = {

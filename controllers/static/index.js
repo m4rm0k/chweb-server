@@ -17,9 +17,9 @@ function serveReactApp (req, res, next) {
   })
 }
 
-function bind (app) {
-  let router = express.Router()
-  app.use('/', router)
+function bind (app, mountPath = '/') {
+  const router = express.Router()
+  app.use(mountPath, router)
   app.use(express.static(getBuildPath()))
 
   router.route('/').get((req, res, next) => {

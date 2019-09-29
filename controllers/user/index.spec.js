@@ -38,8 +38,8 @@ describe('controllers/user', () => {
     })
   })
 
-  describe('GET /api/v1/user', () => {
-    const endpoint = '/api/v1/user'
+  describe('GET /', () => {
+    const endpoint = '/'
 
     it('should require a valid user API key', async () => {
       let res = await agent
@@ -68,8 +68,8 @@ describe('controllers/user', () => {
     })
   })
 
-  describe('POST /api/v1/user/authenticate', () => {
-    const endpoint = '/api/v1/user/authenticate'
+  describe('POST /authenticate', () => {
+    const endpoint = '/authenticate'
 
     describe('if the username or password is incorrect', () => {
       it('should set `success` to false', async () => {

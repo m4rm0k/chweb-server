@@ -8,7 +8,7 @@ const ObjectID = require('mongodb').ObjectID
 const User = require('>/models/User')
 
 describe('controllers/host', () => {
-  const endpoint = '/api/v1/hosts'
+  const endpoint = '/'
   const hostsToInsert = [{
     _id: new ObjectID(),
     name: 'Host 1',
@@ -71,7 +71,7 @@ describe('controllers/host', () => {
     })
   })
 
-  describe('GET /api/v1/hosts', () => {
+  describe('GET /', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
         .get(endpoint)
@@ -96,7 +96,7 @@ describe('controllers/host', () => {
     })
   })
 
-  describe('PUT /api/v1/hosts', () => {
+  describe('PUT /', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
         .put(endpoint)
@@ -150,7 +150,7 @@ describe('controllers/host', () => {
     })
   })
 
-  describe('POST /api/v1/hosts', () => {
+  describe('POST /', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
         .post(endpoint)
@@ -221,9 +221,9 @@ describe('controllers/host', () => {
     })
   })
 
-  describe('GET /api/v1/hosts/:id', () => {
+  describe('GET /:id', () => {
     it('should require a valid user API key', async () => {
-      const endpoint = `/api/v1/hosts/${hosts[0].id}`
+      const endpoint = `/${hosts[0].id}`
       let res = await agent
         .get(endpoint)
         .query({ apiKey: user.apiKey })
@@ -238,7 +238,7 @@ describe('controllers/host', () => {
     })
 
     it('should return the host in `data`', async () => {
-      const endpoint = `/api/v1/hosts/${hosts[0].id}`
+      const endpoint = `/${hosts[0].id}`
       const res = await agent
         .get(endpoint)
         .query({ apiKey: user.apiKey })
@@ -248,10 +248,10 @@ describe('controllers/host', () => {
     })
   })
 
-  describe('DELETE /api/v1/hosts/:id', () => {
+  describe('DELETE /:id', () => {
     it('should require a valid user API key', async () => {
       let res = await agent
-        .delete(`${endpoint}/${hosts[0].id}`)
+        .delete(`/${hosts[0].id}`)
         .query({ apiKey: user.apiKey })
 
       expect(res.status).toBe(200)
@@ -265,7 +265,7 @@ describe('controllers/host', () => {
 
     it('should delete the specified host', async () => {
       const res = await agent
-        .delete(`${endpoint}/${hosts[0].id}`)
+        .delete(`/${hosts[0].id}`)
         .query({
           apiKey: user.apiKey
         })

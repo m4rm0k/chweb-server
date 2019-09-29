@@ -9,14 +9,14 @@ const config = require('>/lib/config')
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const helmet = require('helmet')
+const staticRouter = require('>/controllers/static')
 
 const app = express()
 const controllerNames = [
   'client',
   'hosts',
   'rules',
-  'user',
-  'static'
+  'user'
 ]
 
 function bindErrorHandler (app) {
@@ -35,9 +35,10 @@ function start () {
 
   for (const name of controllerNames) {
     const controller = require(`>/controllers/${name}`)
-    controller.bind(app)
+    controller.bind(app, `/api/v1/${name}`)
   }
 
+  staticRouter.bind(app)
   bindErrorHandler(app)
 
   return app.listen(config.app.bind_port)
