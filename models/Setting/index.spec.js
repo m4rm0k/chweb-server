@@ -12,6 +12,11 @@ describe('models/Setting', () => {
       key: 'defaultAction',
       value: 'REJECT'
     })
+
+    await collection.insertOne({
+      key: 'enableAnalytics',
+      value: true
+    })
   })
 
   afterEach(async () => {
@@ -42,6 +47,24 @@ describe('models/Setting', () => {
     })
   })
 
+  describe('.all', () => {
+    it('should return all settings', async () => {
+      const res = await Setting.all()
+
+      expect(res).toHaveLength(2)
+
+      expect(res).toContainEqual({
+        key: 'defaultAction',
+        value: 'REJECT'
+      })
+
+      expect(res).toContainEqual({
+        key: 'enableAnalytics',
+        value: true
+      })
+    })
+  })
+
   describe('#save', () => {
     describe('when `setting.key` does not exist in the database', () => {
       it('should insert a new document', async () => {
@@ -55,7 +78,7 @@ describe('models/Setting', () => {
           .collection('settings')
           .countDocuments({})
 
-        expect(count).toEqual(2)
+        expect(count).toEqual(3)
       })
     })
 
@@ -68,7 +91,7 @@ describe('models/Setting', () => {
         const totalCount = await connection
           .database
           .collection('settings')
-          .countDocuments({})
+          .countDocuments({ key: 'defaultAction' })
 
         expect(totalCount).toEqual(1)
 
