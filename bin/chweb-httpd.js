@@ -16,7 +16,8 @@ const controllerNames = [
   'client',
   'hosts',
   'rules',
-  'user'
+  'user',
+  'settings'
 ]
 
 function bindErrorHandler (app) {
