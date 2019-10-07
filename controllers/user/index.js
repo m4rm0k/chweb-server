@@ -54,11 +54,20 @@ function getUser (req, res, next) {
   })
 }
 
+function destroySession (req, res, next) {
+  res.cookie(config.app.cookie.name, '', {
+    expires: new Date(0)
+  })
+
+  res.send({ success: true })
+}
+
 function bind (app, mountPath = '/') {
   const router = express.Router()
 
   router.route('/')
     .get(middleware.authenticate, getUser)
+    .delete(middleware.authenticate, destroySession)
 
   router.route('/authenticate')
     .post(authenticate)

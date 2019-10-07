@@ -68,6 +68,33 @@ describe('controllers/user', () => {
     })
   })
 
+  describe('DELETE /', () => {
+    const endpoint = '/'
+
+    it('should require a valid user API key', async () => {
+      let res = await agent
+        .delete(endpoint)
+        .query({ apiKey: user.apiKey })
+
+      expect(res.status).toBe(200)
+
+      res = await agent
+        .delete(endpoint)
+        .query({ apiKey: 'invalid' })
+
+      expect(res.status).toBe(401)
+    })
+
+    it('should expire the session cookie', async () => {
+      const res = await agent
+        .delete(endpoint)
+        .query({ apiKey: user.apiKey })
+
+      const expectedCookie = 'chweb=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      expect(res.headers['set-cookie'][0]).toEqual(expectedCookie)
+    })
+  })
+
   describe('POST /authenticate', () => {
     const endpoint = '/authenticate'
 
