@@ -180,4 +180,32 @@ describe('models/Counter', () => {
       })
     })
   })
+
+  describe('#increment', () => {
+    describe('when `action` is `allowed`', () => {
+      it('should increment the `allowed` property by 1', async () => {
+        let counter = await Counter.find('new.host')
+
+        for (let i = 0; i < 5; i++) {
+          await counter.increment({ action: 'allowed' })
+        }
+
+        counter = await Counter.find('new.host')
+        expect(counter.allowed).toBe(5)
+      })
+    })
+
+    describe('when `action` is `blocked`', () => {
+      it('should increment the `blocked` property by 1', async () => {
+        let counter = await Counter.find('new.host')
+
+        for (let i = 0; i < 3; i++) {
+          await counter.increment({ action: 'blocked' })
+        }
+
+        counter = await Counter.find('new.host')
+        expect(counter.blocked).toBe(3)
+      })
+    })
+  })
 })

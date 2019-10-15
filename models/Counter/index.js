@@ -72,6 +72,29 @@ class Counter {
       return false
     }
   }
+
+  async increment ({ action }) {
+    const connection = await Connection.connect()
+
+    try {
+      await connection
+        .database
+        .collection('counters')
+        .updateOne({ host: this.host }, {
+          $set: {
+            host: this.host
+          },
+          $inc: {
+            allowed: action === 'allowed' ? 1 : 0,
+            blocked: action === 'blocked' ? 1 : 0
+          }
+        }, { upsert: true })
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
 }
 
 module.exports = Counter
