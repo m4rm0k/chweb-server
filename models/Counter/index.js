@@ -81,9 +81,6 @@ class Counter {
         .database
         .collection('counters')
         .updateOne({ host: this.host }, {
-          $set: {
-            host: this.host
-          },
           $inc: {
             allowed: action === 'allowed' ? 1 : 0,
             blocked: action === 'blocked' ? 1 : 0
