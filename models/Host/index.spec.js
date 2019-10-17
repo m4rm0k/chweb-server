@@ -27,8 +27,12 @@ describe('models/Host', () => {
   })
 
   afterEach(async () => {
+    __rewire_reset_all__()
     await connection.database.collection('hosts').removeMany({})
-    await connection.client.close()
+  })
+
+  afterAll(async () => {
+    await connection.close()
   })
 
   describe('.find', () => {

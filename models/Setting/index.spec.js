@@ -22,7 +22,7 @@ describe('models/Setting', () => {
   afterEach(async () => {
     __rewire_reset_all__()
     await connection.database.collection('settings').removeMany({})
-    await connection.client.close()
+    await connection.close()
   })
 
   describe('.find', () => {

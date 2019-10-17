@@ -29,7 +29,7 @@ describe('controllers/user', () => {
   })
 
   afterAll(async () => {
-    await connection.client.close()
+    await connection.close()
   })
 
   describe('module.exports', () => {

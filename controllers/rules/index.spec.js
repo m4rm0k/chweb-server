@@ -55,7 +55,7 @@ describe('controllers/rules', () => {
 
   afterAll(async () => {
     await global.removeAllMongoDocs()
-    await connection.client.close()
+    await connection.close()
   })
 
   beforeEach(async () => {

@@ -34,7 +34,7 @@ describe('controllers/user/middleware', () => {
 
   afterAll(async () => {
     await global.removeAllMongoDocs()
-    await connection.client.close()
+    await connection.close()
   })
 
   describe('.authenticate', () => {

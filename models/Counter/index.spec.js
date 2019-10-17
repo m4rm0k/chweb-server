@@ -27,7 +27,7 @@ describe('models/Counter', () => {
 
   afterAll(async () => {
     await connection.database.collection('counters').removeMany({})
-    await connection.client.close()
+    await connection.close()
   })
 
   describe('.find', () => {

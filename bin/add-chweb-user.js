@@ -12,7 +12,7 @@ const User = require('>/models/User')
 
 async function exit (connection) {
   if (connection) {
-    await connection.client.close()
+    await connection.close()
   }
 
   process.exit()
@@ -76,7 +76,7 @@ async function start () {
     exit(connection)
   }
 
-  await connection.client.close()
+  await connection.close()
 }
 
 start()

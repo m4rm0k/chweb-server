@@ -24,7 +24,7 @@ describe('bin/chweb-httpd', () => {
 
   afterAll(async () => {
     await app.close()
-    await connection.client.close()
+    await connection.close()
     console.error = originalError
   })
 

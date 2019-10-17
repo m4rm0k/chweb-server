@@ -39,7 +39,7 @@ describe('controllers/settings', () => {
 
   afterAll(async () => {
     await global.removeAllMongoDocs()
-    await connection.client.close()
+    await connection.close()
   })
 
   describe('GET /', () => {

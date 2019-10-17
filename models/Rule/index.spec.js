@@ -31,7 +31,7 @@ describe('models/Rule', () => {
 
   afterAll(async () => {
     await connection.database.collection('rules').removeMany({})
-    await connection.client.close()
+    await connection.close()
   })
 
   describe('.find', () => {

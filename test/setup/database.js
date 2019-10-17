@@ -5,5 +5,5 @@ module.exports = async () => {
   const connection = await Connection.connect()
   await connection.database.collection('hosts').removeMany({})
   await connection.database.collection('users').removeMany({})
-  await connection.client.close()
+  await connection.close()
 }

@@ -23,7 +23,7 @@ describe('models/User', () => {
   afterEach(async () => {
     __rewire_reset_all__()
     await connection.database.collection('users').removeMany({})
-    await connection.client.close()
+    await connection.close()
   })
 
   describe('.find', () => {
