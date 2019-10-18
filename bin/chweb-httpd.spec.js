@@ -63,6 +63,13 @@ describe('bin/chweb-httpd', () => {
     expect(res.status).not.toBeUndefined()
   })
 
+  it('should bind a controller to `/api/v1/analytics', async () => {
+    const res = await agent.get('/api/v1/analytics')
+    expect(res.status).not.toEqual(404)
+    expect(res.status).not.toBeNull()
+    expect(res.status).not.toBeUndefined()
+  })
+
   it('should not send the `X-Powered-By` header', async () => {
     const res = await agent.get('/api/v1/hosts')
     expect(res.headers['x-powered-by']).toBeUndefined()
