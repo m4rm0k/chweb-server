@@ -54,7 +54,11 @@ describe('controllers/host', () => {
       hosts.push({
         id: hostsToInsert[i]._id.toString(),
         name: hostsToInsert[i].name,
-        apiKey: hostsToInsert[i].apiKey
+        apiKey: hostsToInsert[i].apiKey,
+        counter: {
+          allowed: 0,
+          blocked: 0
+        }
       })
     }
   })
@@ -216,7 +220,11 @@ describe('controllers/host', () => {
       expect(res.body.data).toEqual({
         id: hosts[0].id,
         name: 'updated',
-        apiKey: hosts[0].apiKey
+        apiKey: hosts[0].apiKey,
+        counter: {
+          allowed: 0,
+          blocked: 0
+        }
       })
     })
   })
