@@ -6,6 +6,10 @@ class Host {
   constructor () {
     this.id = new ObjectID()
     this.apiKey = uuidv4()
+    this.counter = {
+      allowed: 0,
+      blocked: 0
+    }
   }
 
   static async __find (criteria) {
@@ -19,6 +23,10 @@ class Host {
       host.apiKey = doc.apiKey
       host.name = doc.name
       host.lastSeen = doc.lastSeen
+
+      if (doc.counter) {
+        host.counter = doc.counter
+      }
 
       return host
     } else {
@@ -51,6 +59,11 @@ class Host {
       host.name = docs[i].name
       host.apiKey = docs[i].apiKey
       host.lastSeen = docs[i].lastSeen
+
+      if (docs[i].counter) {
+        host.counter = docs[i].counter
+      }
+
       hosts.push(host)
     }
 
@@ -79,13 +92,34 @@ class Host {
         $set: {
           apiKey: this.apiKey,
           name: this.name,
-          lastSeen: this.lastSeen
+          lastSeen: this.lastSeen,
+          counter: this.counter
         }
       }, { upsert: true })
 
       if (res.upsertedId) {
         this.id = res.upsertedId._id
       }
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  async incrementCounter ({ action }) {
+    const connection = await Connection.connect()
+
+    try {
+      await connection
+        .database
+        .collection('hosts')
+        .updateOne({ _id: this.id }, {
+          $inc: {
+            'counter.allowed': action === 'allowed' ? 1 : 0,
+            'counter.blocked': action === 'blocked' ? 1 : 0
+          }
+        })
 
       return true
     } catch (e) {

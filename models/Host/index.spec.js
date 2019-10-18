@@ -14,7 +14,11 @@ describe('models/Host', () => {
     const insertRes = await connection.database.collection('hosts').insertOne({
       apiKey: '1234-5678',
       name: 'Test Host',
-      lastSeen: lastSeen
+      lastSeen: lastSeen,
+      counter: {
+        allowed: 0,
+        blocked: 0
+      }
     })
 
     lastHost = insertRes.ops[0]
@@ -73,6 +77,11 @@ describe('models/Host', () => {
       const host = await Host.find(lastHost._id)
       expect(host.lastSeen).toEqual(lastHost.lastSeen)
     })
+
+    it('should populate the `counter` property', async () => {
+      const host = await Host.find(lastHost._id)
+      expect(host.counter).toEqual(lastHost.counter)
+    })
   })
 
   describe('.findByKey', () => {
@@ -104,6 +113,11 @@ describe('models/Host', () => {
     it('should populate the `lastSeen` property', async () => {
       const host = await Host.findByKey(lastHost.apiKey)
       expect(host.lastSeen).toEqual(lastHost.lastSeen)
+    })
+
+    it('should populate the `counter` property', async () => {
+      const host = await Host.findByKey(lastHost.apiKey)
+      expect(host.counter).toEqual(lastHost.counter)
     })
   })
 
@@ -141,6 +155,13 @@ describe('models/Host', () => {
       const hosts = await Host.all()
       for (let i = 0; i < 2; i++) {
         expect(hosts[i].lastSeen).not.toBeUndefined()
+      }
+    })
+
+    it('should populate the `counter` property', async () => {
+      const hosts = await Host.all()
+      for (let i = 0; i < 2; i++) {
+        expect(hosts[i].counter).not.toBeUndefined()
       }
     })
   })
@@ -253,6 +274,40 @@ describe('models/Host', () => {
       const host = new MockedHost()
       const res = await host.save()
       expect(res).toBe(false)
+    })
+  })
+
+  describe('#incrementCounter', () => {
+    describe('when `action` is `allowed`', () => {
+      it('should increment the `counter.allowed` property by 1', async () => {
+        let host = new Host()
+        host.name = 'host'
+        host.lastSeen = 1234
+        await host.save()
+
+        for (let i = 0; i < 5; i++) {
+          await host.incrementCounter({ action: 'allowed' })
+        }
+
+        host = await Host.find(host.id)
+        expect(host.counter.allowed).toBe(5)
+      })
+    })
+
+    describe('when `action` is `blocked`', () => {
+      it('should increment the `counter.blocked` property by 1', async () => {
+        let host = new Host()
+        host.name = 'host'
+        host.lastSeen = 1234
+        await host.save()
+
+        for (let i = 0; i < 5; i++) {
+          await host.incrementCounter({ action: 'blocked' })
+        }
+
+        host = await Host.find(host.id)
+        expect(host.counter.blocked).toBe(5)
+      })
     })
   })
 })
