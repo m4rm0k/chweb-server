@@ -23,6 +23,7 @@ describe('controllers/analytics', () => {
   beforeEach(async () => {
     const connection = await Connection.connect()
     await connection.database.collection('counters').removeMany({})
+    await connection.database.collection('hosts').removeMany({})
 
     await createCounter('<all>', 5, 10)
     for (let i = 0; i < 10; i++) {
@@ -34,6 +35,14 @@ describe('controllers/analytics', () => {
     user.username = 'test'
     user.apiKey = new ObjectID().toString()
     await user.save()
+
+    for (let i = 0; i < 5; i++) {
+      host = new Host()
+      host.name = `host-00${i + 1}`
+      host.counter.allowed = 5 + i
+      host.counter.blocked = 10 + i
+      await host.save()
+    }
 
     host = new Host()
     host.name = 'Test'
@@ -128,6 +137,38 @@ describe('controllers/analytics', () => {
       }, {
         host: 'host-05',
         allowed: 5,
+        blocked: 0
+      }])
+    })
+
+    it('should include the host activity counters in the response', async () => {
+      const res = await agent
+        .get('/')
+        .query({ apiKey: user.apiKey })
+
+      expect(res.body.data.counters.hosts).toEqual([{
+        name: 'host-001',
+        allowed: 5,
+        blocked: 10
+      }, {
+        name: 'host-002',
+        allowed: 6,
+        blocked: 11
+      }, {
+        name: 'host-003',
+        allowed: 7,
+        blocked: 12
+      }, {
+        name: 'host-004',
+        allowed: 8,
+        blocked: 13
+      }, {
+        name: 'host-005',
+        allowed: 9,
+        blocked: 14
+      }, {
+        name: 'Test',
+        allowed: 0,
         blocked: 0
       }])
     })

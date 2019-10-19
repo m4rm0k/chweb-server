@@ -1,4 +1,5 @@
 const Counter = require('>/models/Counter')
+const Host = require('>/models/Host')
 const express = require('express')
 const verifyUser = require('>/controllers/user').middleware.authenticate
 const verifyHost = require('>/controllers/hosts').middleware.authenticate
@@ -39,6 +40,15 @@ async function getCounters (req, res, next) {
       host: c.host,
       allowed: c.allowed,
       blocked: c.blocked
+    }
+  })
+
+  const hosts = await Host.all()
+  counters.hosts = hosts.map(h => {
+    return {
+      name: h.name,
+      allowed: h.counter.allowed,
+      blocked: h.counter.blocked
     }
   })
 
