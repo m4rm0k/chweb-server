@@ -42,7 +42,10 @@ async function getCounters (req, res, next) {
     }
   })
 
-  return res.send({ counters })
+  return res.send({
+    success: true,
+    data: { counters }
+  })
 }
 
 async function updateCounters (req, res, next) {

@@ -70,7 +70,7 @@ describe('controllers/analytics', () => {
         .get('/')
         .query({ apiKey: user.apiKey })
 
-      expect(res.body.counters.global).toEqual({
+      expect(res.body.data.counters.global).toEqual({
         allowed: 5,
         blocked: 10
       })
@@ -81,7 +81,7 @@ describe('controllers/analytics', () => {
         .get('/')
         .query({ apiKey: user.apiKey })
 
-      expect(res.body.counters.mostBlocked).toEqual([{
+      expect(res.body.data.counters.mostBlocked).toEqual([{
         host: 'host-19',
         blocked: 9,
         allowed: 0
@@ -109,7 +109,7 @@ describe('controllers/analytics', () => {
         .get('/')
         .query({ apiKey: user.apiKey })
 
-      expect(res.body.counters.mostAllowed).toEqual([{
+      expect(res.body.data.counters.mostAllowed).toEqual([{
         host: 'host-09',
         allowed: 9,
         blocked: 0
