@@ -71,6 +71,18 @@ describe('controllers/client', () => {
         upsert: true
       })
 
+    await connection.database
+      .collection('settings')
+      .updateOne({
+        key: 'enableAnalytics'
+      }, {
+        $set: {
+          value: true
+        }
+      }, {
+        upsert: true
+      })
+
     for (let i = 0; i < rulesToInsert.length; i++) {
       const rule = {
         id: rulesToInsert[i]._id.toString(),
@@ -131,6 +143,14 @@ describe('controllers/client', () => {
       host = await Host.find(host.id)
       expect(host.lastSeen).toBeTruthy()
       expect(host.lastSeen).toBeGreaterThanOrEqual(timestamp)
+    })
+
+    it('should return the enableAnalytics setting in `data.enableAnalytics`', async () => {
+      const res = await agent
+        .get(endpoint)
+        .query({ apiKey: host.apiKey })
+
+      expect(res.body.data.enableAnalytics).toBe(true)
     })
   })
 })

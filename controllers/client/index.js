@@ -14,11 +14,13 @@ async function getConfig (req, res, next) {
 
     const rules = await Rule.all()
     const defaultAction = await Setting.find('defaultAction')
+    const enableAnalytics = await Setting.find('enableAnalytics')
 
     res.send({
       success: true,
       data: {
         defaultAction: defaultAction.value,
+        enableAnalytics: enableAnalytics.value,
         rules: rules.map(r => ({
           id: r.id.toString(),
           type: r.type,
