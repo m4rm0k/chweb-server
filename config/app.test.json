@@ -6,5 +6,7 @@
   },
   "password": {
     "salt_rounds": 4
-  }
+  },
+  "uid": 1000,
+  "gid": 1001
 }

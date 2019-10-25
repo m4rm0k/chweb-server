@@ -31,6 +31,16 @@ function bindErrorHandler (app) {
 }
 
 function start () {
+  if (config.app.gid) {
+    process.setgid(config.app.gid)
+    console.log(`Changed egid to ${config.app.gid}`)
+  }
+
+  if (config.app.uid) {
+    process.setuid(config.app.uid)
+    console.log(`Changed euid to ${config.app.uid}`)
+  }
+
   app.use(helmet())
   app.use(cookieParser(config.app.cookie.secret))
   app.use(bodyParser.json())

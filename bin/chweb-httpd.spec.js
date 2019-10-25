@@ -6,26 +6,36 @@ const Connection = require('>/lib/database/Connection')
 describe('bin/chweb-httpd', () => {
   let app, agent, connection
   let originalError
+  let setuid, setgid
 
-  beforeAll(async () => {
+  beforeEach(async () => {
+    setuid = process.setuid
+    setgid = process.setgid
+
+    process.setuid = jest.fn()
+    process.setgid = jest.fn()
+
+    originalError = console.error
+    console.error = jest.fn()
+
+    connection = await Connection.connect()
     app = subject.start()
 
     subject.app.get('/unit-test-error', (req, res) => {
       throw new Error()
     })
 
-    originalError = console.error
-    console.error = jest.fn()
-
     subject.bindErrorHandler(subject.app)
     agent = request.agent(app)
-    connection = await Connection.connect()
   })
 
-  afterAll(async () => {
+  afterEach(async () => {
     await app.close()
     await connection.close()
+
     console.error = originalError
+    process.setuid = setuid
+    process.setgid = setgid
   })
 
   it('should bind a controller to `/api/v1/client`', async () => {
@@ -92,6 +102,18 @@ describe('bin/chweb-httpd', () => {
     it('should set the status to 500', async () => {
       const res = await agent.get('/unit-test-error')
       expect(res.status).toEqual(500)
+    })
+  })
+
+  describe('if `uid` is set in the app config', () => {
+    it('should call `process.setuid` with the uid to drop the privileges to', () => {
+      expect(process.setuid).toHaveBeenCalledWith(1000)
+    })
+  })
+
+  describe('if `gid` is set in the app config', () => {
+    it('should call `process.setgid` with the gid to drop the privileges to', () => {
+      expect(process.setgid).toHaveBeenCalledWith(1001)
     })
   })
 })
