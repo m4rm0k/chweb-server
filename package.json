@@ -5,7 +5,8 @@
   "description": "A tool for centrally managing web browser access rules",
   "bin": {
     "add-chweb-user": "bin/add-chweb-user.js",
-    "chweb-httpd": "bin/chweb-httpd.js"
+    "chweb-httpd": "bin/chweb-httpd.js",
+    "chweb-setup": "bin/chweb-setup.js"
   },
   "scripts": {
     "test": "mkdir -p public/app/build && jest --runInBand",
@@ -20,6 +21,7 @@
     "express": "^4.17.1",
     "helmet": "^3.21.0",
     "mongodb": "^3.3.2",
+    "morgan": "^1.9.1",
     "node-fetch": "^2.6.0",
     "prompt-password": "^1.2.0",
     "sqlite3": "^4.1.0",

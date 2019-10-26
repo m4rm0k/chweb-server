@@ -9,6 +9,7 @@ const config = require('>/lib/config')
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const helmet = require('helmet')
+const morgan = require('morgan')
 const staticRouter = require('>/controllers/static')
 
 const app = express()
@@ -41,6 +42,7 @@ function start () {
     console.log(`Changed euid to ${config.app.uid}`)
   }
 
+  app.use(morgan('short'))
   app.use(helmet())
   app.use(cookieParser(config.app.cookie.secret))
   app.use(bodyParser.json())
@@ -57,6 +59,11 @@ function start () {
 }
 
 if (require.main === module) {
+  if (!config.exists) {
+    console.error('chweb has not been configured yet. Run `yarn setup` to complete the initial setup.')
+    process.exit(1)
+  }
+
   start()
 }
 
