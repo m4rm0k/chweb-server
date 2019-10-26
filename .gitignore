@@ -1,5 +1,6 @@
 # // Build fragments
 build/
+data/
 
 # // Package management files
 node_modules/
