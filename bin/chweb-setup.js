@@ -1,11 +1,14 @@
 #! /usr/bin/env node
 
+const argv = require('yargs').argv
+
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'development'
 }
 
 require('colors')
 
+const autoMode = argv.auto
 const fs = require('fs')
 const uuidv4 = require('uuid/v4')
 
@@ -16,6 +19,12 @@ const Enquirer = require('enquirer')
 const Setting = require('>/models/Setting')
 
 async function start () {
+  Config.reload()
+  if (Config.exists) {
+    console.log('chweb has already been configured')
+    process.exit()
+  }
+
   const dbConfig = {}
   const appConfig = {}
   const enquirer = new Enquirer()
@@ -33,41 +42,48 @@ async function start () {
       type: 'input',
       message: 'Environment name:',
       name: 'env',
-      initial: process.env.NODE_ENV
+      initial: process.env.NODE_ENV,
+      skip: autoMode
     },
     {
       type: 'number',
       message: 'Port:',
       name: 'port',
-      initial: 3000
+      initial: argv.expressPort || 3000,
+      skip: autoMode
     },
     {
       type: 'input',
       message: 'Session cookie name:',
       name: 'cookie_name',
-      initial: 'chweb'
+      initial: 'chweb',
+      skip: autoMode
     },
     {
       type: 'input',
       message: 'Session cookie secret:',
       name: 'cookie_secret',
-      initial: uuidv4()
+      initial: uuidv4(),
+      skip: autoMode
     },
     {
       type: 'number',
       message: 'Password salt rounds:',
       name: 'salt_rounds',
-      initial: 10
+      initial: 10,
+      skip: autoMode
     },
     {
       type: 'number',
       message: 'User ID to run as (optional):',
-      name: 'uid'
+      name: 'uid',
+      skip: autoMode
     },
     {
       type: 'number',
       message: 'Group ID to run as (optional):',
-      name: 'gid'
+      name: 'gid',
+      skip: autoMode
     }
   ])
 
@@ -105,25 +121,29 @@ async function start () {
     {
       type: 'input',
       message: 'MongoDB host:',
-      initial: '127.0.0.1',
-      name: 'mongodb_host'
+      initial: argv.mongodbHost || '127.0.0.1',
+      name: 'mongodb_host',
+      skip: autoMode
     },
     {
-      type: 'input',
+      type: 'number',
       message: 'MongoDB port:',
       initial: 27017,
-      name: 'mongodb_port'
+      name: 'mongodb_port',
+      skip: autoMode
     },
     {
       type: 'input',
       message: 'Database name:',
       initial: 'chweb',
-      name: 'mongodb_database'
+      name: 'mongodb_database',
+      skip: autoMode
     },
     {
       type: 'confirm',
       message: 'Is MongoDB authentication enabled?',
-      name: 'mongodb_auth_enabled'
+      name: 'mongodb_auth_enabled',
+      skip: autoMode
     }
   ])
 
@@ -179,7 +199,7 @@ async function start () {
     process.exit(2)
   }
 
-  const setting = new Setting()
+  let setting = new Setting()
   setting.key = 'defaultAction'
   setting.value = 'REJECT'
 
@@ -187,6 +207,16 @@ async function start () {
     console.log('✔'.green + ' Setup default action rule')
   } else {
     console.log('✖'.red + ' Failed to setup default action rule')
+  }
+
+  setting = new Setting()
+  setting.key = 'enableAnalytics'
+  setting.value = true
+
+  if (await setting.save()) {
+    console.log('✔'.green + ' Setup analytics')
+  } else {
+    console.log('✖'.red + ' Failed to setup analytics')
   }
 
   const counter = new Counter()
