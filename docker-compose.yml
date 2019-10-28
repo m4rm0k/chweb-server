@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  app:
-    container_name: app
+  chweb_app:
+    container_name: chweb_app
     restart: always
     build: .
     environment:
@@ -10,15 +10,15 @@ services:
     ports:
       - "8080:8080"
     links:
-      - mongo
+      - chweb_mongo
     depends_on:
-      - mongo
+      - chweb_mongo
     networks:
       - chweb-network
-    command: ./docker/wait-for.sh mongo:27017 -- ./docker/launch.sh
+    command: ./docker/wait-for.sh chweb_mongo:27017 -- ./docker/launch.sh
 
-  mongo:
-    container_name: mongo
+  chweb_mongo:
+    container_name: chweb_mongo
     image: mongo:latest
     networks:
       - chweb-network
