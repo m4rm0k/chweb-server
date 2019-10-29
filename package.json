@@ -9,8 +9,9 @@
     "chweb-setup": "bin/chweb-setup.js"
   },
   "scripts": {
+    "postinstall": "ln -fsn ../ 'node_modules/>'",
     "test": "mkdir -p public/app/build && jest --runInBand",
-    "postinstall": "ln -fsn ../ 'node_modules/>'"
+    "test-ci": "mkdir -p public/app/build && jest --runInBand --coverage --coverageReporters=text-lcov | coveralls"
   },
   "dependencies": {
     "@babel/polyfill": "^7.6.0",
