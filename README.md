@@ -2,8 +2,7 @@
 
 <h1 align="center">chweb</h1>
 <p align="center">
-<div style="text-align: center;">
-  <a href="https://travis-ci.org/rastating/chweb-server"><img src="https://travis-ci.org/rastating/chweb-server.svg?branch=master" /></a> <a href="https://codeclimate.com/github/rastating/chweb-server/maintainability"><img src="https://api.codeclimate.com/v1/badges/d354781ed3397172b890/maintainability" /></a> <a href="https://coveralls.io/github/rastating/chweb-server?branch=master"><img src="https://coveralls.io/repos/github/rastating/chweb-server/badge.svg?branch=master" /></a> <a href="https://www.patreon.com/rastating"><img src="https://img.shields.io/badge/patreon-support_this_project-orange" alt="Patreon" /></a>
+    <a href="https://travis-ci.org/rastating/chweb-server"><img src="https://travis-ci.org/rastating/chweb-server.svg?branch=master" /></a> <a href="https://codeclimate.com/github/rastating/chweb-server/maintainability"><img src="https://api.codeclimate.com/v1/badges/d354781ed3397172b890/maintainability" /></a> <a href="https://coveralls.io/github/rastating/chweb-server?branch=master"><img src="https://coveralls.io/repos/github/rastating/chweb-server/badge.svg?branch=master" /></a> <a href="https://www.patreon.com/rastating"><img src="https://img.shields.io/badge/patreon-support_this_project-orange" alt="Patreon" /></a>
 </p>
 
 <p align="center">
