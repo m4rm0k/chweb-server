@@ -57,7 +57,9 @@ Which web browsers are supported?
 ---------------------------------
 Currently, only Google Chrome is supported. However, I hope to create builds of the extension for other browsers soon.
 
-The extension is currently awaiting approving to be added to the Google store (where it will be free). Until then, it must be loaded from source from [This Repository](https://github.com/rastating/chweb-chrome)
+The extension can be installed from the web store here: [https://chrome.google.com/webstore/detail/chweb/mfodgeapiplbioiakjgijonfhknmecab](https://chrome.google.com/webstore/detail/chweb/mfodgeapiplbioiakjgijonfhknmecab)
+
+Alternatively, you can build it from the source code found in [This Repository](https://github.com/rastating/chweb-chrome)
 
 Setting up a browser
 --------------------
