@@ -18,7 +18,7 @@ The fastest way to start a chweb server is to use Docker. To setup the server wi
 1. Install Docker and Docker Compose on your system
 2. Clone the source code: `git clone --recurse-submodules https://github.com/rastating/chweb-server.git`
 3. Build the images and create the containers: `cd chweb-server && docker-compose up`
-4. Create the initial admin user(s): `docker-compose exec app add-chweb-user`
+4. Create the initial admin user(s): `docker-compose exec chweb_app add-chweb-user`
 
 After running `docker-compose`, the server will be running on port 8080. If you'd like to change this, you can alter the binding in `docker-compose.yml`
 
