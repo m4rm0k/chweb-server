@@ -1,6 +1,9 @@
 FROM node:latest
 RUN apt-get -q update && apt-get -qy install netcat
-RUN npm -g install yarn
+# Yarn is included in the latest node images
+# if you are using one which does not include it, uncomment
+# the following line:
+# RUN npm -g install yarn
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app
